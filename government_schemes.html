@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Government Agriculture Schemes — KrishiMitra AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --p:#22c55e; --p2:#16a34a; --p3:#4ade80;
+  --bg:#060d14; --s1:#0a1628; --s2:#0f1f35;
+  --card:rgba(15,31,53,0.95); --border:rgba(34,197,94,0.12);
+  --border2:rgba(255,255,255,0.06); --txt:#f0f9f4; --sub:#94a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;}
+
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 600px 500px at 70% -5%,rgba(34,197,94,0.07),transparent 70%);pointer-events:none;z-index:0;}
+
+.topnav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(6,13,20,0.97);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+  padding:0 32px;height:66px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{display:flex;align-items:center;gap:12px;}
+.nav-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--p),var(--p2));border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.nav-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;background:linear-gradient(135deg,#4ade80,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-sub{font-size:10px;color:var(--sub);letter-spacing:1px;}
+.back-btn{padding:9px 18px;border:1px solid var(--border2);border-radius:50px;background:transparent;color:var(--txt);font-size:12px;font-weight:500;cursor:pointer;text-decoration:none;transition:0.2s;font-family:'DM Sans',sans-serif;}
+.back-btn:hover{background:rgba(34,197,94,0.1);border-color:var(--border);}
+
+.hero{
+  padding:60px 32px 40px;
+  max-width:1200px;margin:0 auto;
+  position:relative;z-index:1;
+}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:50px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);font-size:11px;font-weight:600;color:var(--p3);letter-spacing:1px;margin-bottom:20px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;line-height:1.15;margin-bottom:14px;}
+.hero h1 span{background:linear-gradient(135deg,#4ade80,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{font-size:15px;color:var(--sub);line-height:1.8;max-width:700px;}
+.stats-row{display:flex;gap:24px;margin-top:30px;flex-wrap:wrap;}
+.stat{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:18px 24px;text-align:center;}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--p3);}
+.stat-lbl{font-size:11px;color:var(--sub);margin-top:4px;}
+
+.filter-bar{padding:0 32px 28px;max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;}
+.filter-btn{padding:9px 18px;border-radius:50px;border:1px solid var(--border2);background:var(--s1);color:var(--sub);font-size:12px;cursor:pointer;transition:0.2s;font-family:'DM Sans',sans-serif;}
+.filter-btn:hover,.filter-btn.active{background:rgba(34,197,94,0.12);border-color:var(--border);color:var(--p3);}
+
+.schemes-grid{padding:0 32px 60px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:22px;position:relative;z-index:1;}
+
+.scheme-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:22px;
+  overflow:hidden;transition:0.3s;position:relative;
+}
+.scheme-card:hover{border-color:rgba(34,197,94,0.25);transform:translateY(-4px);}
+.scheme-card.featured{border-color:rgba(34,197,94,0.3);}
+.scheme-card.featured::before{content:'⭐ POPULAR';position:absolute;top:14px;right:14px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--p3);font-size:9px;font-weight:700;padding:4px 10px;border-radius:50px;letter-spacing:1px;}
+
+.scheme-banner{height:160px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;overflow:hidden;}
+.scheme-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(15,31,53,0.8));}
+
+.scheme-body{padding:20px;}
+.scheme-category{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--p3);text-transform:uppercase;margin-bottom:8px;}
+.scheme-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px;line-height:1.3;}
+.scheme-full-name{font-size:11px;color:var(--sub);margin-bottom:14px;}
+.scheme-desc{font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:16px;}
+
+.scheme-benefits{background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:14px;padding:14px;margin-bottom:14px;}
+.scheme-benefits h4{font-size:11px;font-weight:700;color:var(--p3);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase;}
+.benefit-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:12px;color:var(--sub);}
+.benefit-item:last-child{margin:0;}
+.benefit-dot{width:18px;height:18px;border-radius:6px;background:rgba(34,197,94,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;}
+
+.scheme-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.meta-tag{padding:5px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);font-size:11px;color:var(--sub);}
+
+.scheme-actions{display:flex;gap:10px;}
+.act-btn{flex:1;padding:11px;border-radius:12px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;font-family:'DM Sans',sans-serif;text-decoration:none;text-align:center;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.act-btn.primary{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;}
+.act-btn.primary:hover{filter:brightness(1.1);}
+.act-btn.secondary{background:rgba(255,255,255,0.04);border:1px solid var(--border2);color:var(--sub);}
+.act-btn.secondary:hover{background:rgba(34,197,94,0.08);border-color:var(--border);color:var(--p3);}
+
+.helpline-section{padding:0 32px 60px;max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.helpline-section h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:20px;}
+.helpline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.helpline-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px;}
+.hicon{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.hnum{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--p3);}
+.hlabel{font-size:12px;color:var(--sub);margin-top:2px;}
+
+.footer-bar{background:rgba(10,22,40,0.98);border-top:1px solid var(--border2);padding:24px 32px;text-align:center;font-size:12px;color:var(--sub);}
+
+@media(max-width:768px){
+  .hero{padding:40px 18px 28px;}
+  .hero h1{font-size:28px;}
+  .filter-bar{padding:0 18px 20px;}
+  .schemes-grid{padding:0 18px 40px;grid-template-columns:1fr;}
+  .helpline-section{padding:0 18px 40px;}
+  .topnav{padding:0 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="nav-brand">
+    <div class="nav-icon">🌾</div>
+    <div>
+      <div class="nav-title">KrishiMitra AI</div>
+      <div class="nav-sub">GOVERNMENT SCHEMES PORTAL</div>
+    </div>
+  </div>
+  <a href="index.html" class="back-btn">← Back to AI Chat</a>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">🏛️ INDIA GOVERNMENT AGRICULTURE SCHEMES 2024–25</div>
+  <h1>Complete Guide to <span>Kisan Welfare</span><br>Schemes &amp; Benefits</h1>
+  <p>All major central and state government agriculture schemes with benefits, eligibility criteria, application process, and official links — updated for 2024–25.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">20+</div><div class="stat-lbl">Active Schemes</div></div>
+    <div class="stat"><div class="stat-val">₹6,000</div><div class="stat-lbl">PM-KISAN Annual</div></div>
+    <div class="stat"><div class="stat-val">14 Cr+</div><div class="stat-lbl">Beneficiary Farmers</div></div>
+    <div class="stat"><div class="stat-val">4%</div><div class="stat-lbl">KCC Interest Rate</div></div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterCards('all',this)">All Schemes</button>
+    <button class="filter-btn" onclick="filterCards('income',this)">Income Support</button>
+    <button class="filter-btn" onclick="filterCards('insurance',this)">Insurance</button>
+    <button class="filter-btn" onclick="filterCards('credit',this)">Credit &amp; Loan</button>
+    <button class="filter-btn" onclick="filterCards('infrastructure',this)">Infrastructure</button>
+    <button class="filter-btn" onclick="filterCards('technology',this)">Technology</button>
+    <button class="filter-btn" onclick="filterCards('market',this)">Market &amp; Trade</button>
+  </div>
+</div>
+
+<div class="schemes-grid" id="schemesGrid">
+
+  <div class="scheme-card featured" data-cat="income">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0f3a1e,#0a2814)">🌾</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Income Support</div>
+      <div class="scheme-title">PM-KISAN</div>
+      <div class="scheme-full-name">Pradhan Mantri Kisan Samman Nidhi</div>
+      <div class="scheme-desc">Direct income support of ₹6,000 per year to all landholding farmer families, released in 3 equal installments of ₹2,000 directly to bank accounts.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>₹6,000/year in 3 installments of ₹2,000 each</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Direct Bank Transfer (DBT) to Aadhaar-linked account</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>All landholding farmer families eligible</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>No income cap — all small, marginal, large farmers</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🗓️ Since Feb 2019</span>
+        <span class="meta-tag">👨‍🌾 14 Crore+ Farmers</span>
+        <span class="meta-tag">💰 ₹6,000/year</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://pmkisan.gov.in" target="_blank" class="act-btn primary">🌐 Apply Now</a>
+        <a href="https://pmkisan.gov.in/BeneficiaryStatus/BenificiaryStatus_New.aspx" target="_blank" class="act-btn secondary">📋 Check Status</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card featured" data-cat="insurance">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#1a1a0a,#2d2a00)">🛡️</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Crop Insurance</div>
+      <div class="scheme-title">PMFBY</div>
+      <div class="scheme-full-name">Pradhan Mantri Fasal Bima Yojana</div>
+      <div class="scheme-desc">Comprehensive crop insurance scheme covering losses from natural calamities, pests, and diseases. Farmer pays very low premium; rest is subsidized by government.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Premium: 2% for Kharif, 1.5% for Rabi, 5% for Horticulture</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Full sum insured based on crop area notified</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Covers: drought, flood, cyclone, pest, hailstorm, disease</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Satellite imagery &amp; tech-based loss assessment</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🌾 Kharif + Rabi</span>
+        <span class="meta-tag">📍 Pan India</span>
+        <span class="meta-tag">💰 Low Premium</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://pmfby.gov.in" target="_blank" class="act-btn primary">🌐 Apply Now</a>
+        <a href="https://pmfby.gov.in/farmerRegistrationForm" target="_blank" class="act-btn secondary">📝 Register</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card featured" data-cat="credit">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0f1a38,#0a1228)">💳</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Credit &amp; Loan</div>
+      <div class="scheme-title">Kisan Credit Card</div>
+      <div class="scheme-full-name">KCC — Kisan Credit Card Scheme</div>
+      <div class="scheme-desc">Provides farmers with affordable credit for crop cultivation, post-harvest expenses, produce marketing, and consumption needs at subsidized interest rates.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Credit up to ₹3 lakh at 4% effective interest rate</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Government subvention: 2% + 3% for timely repayment</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>No collateral required up to ₹1.6 lakh</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Insurance cover for farmer + crop included</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">💰 4% Interest</span>
+        <span class="meta-tag">🏦 All Banks</span>
+        <span class="meta-tag">✅ Zero Collateral &lt;₹1.6L</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://www.nabard.org/content1.aspx?id=572" target="_blank" class="act-btn primary">🌐 Apply via Bank</a>
+        <a href="https://kcc.nabard.org" target="_blank" class="act-btn secondary">📋 NABARD Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="income">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#1a0f00,#2d1a00)">📦</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Price Support</div>
+      <div class="scheme-title">PM-ASHA</div>
+      <div class="scheme-full-name">Pradhan Mantri Annadata Aay Sanrakshan Abhiyan</div>
+      <div class="scheme-desc">Ensures farmers get the minimum support price for oilseeds, pulses, and copra through procurement and price support operations.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>MSP guaranteed for oilseeds, pulses and copra</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Price Deficiency Payment (PDP) — difference paid directly</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Pilot Private Procurement &amp; Stockist Scheme (PPPS)</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🌱 Oilseeds &amp; Pulses</span>
+        <span class="meta-tag">💰 MSP Protected</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://agricoop.nic.in" target="_blank" class="act-btn primary">🌐 Official Portal</a>
+        <a href="https://enam.gov.in" target="_blank" class="act-btn secondary">📊 eNAM Market</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="infrastructure">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#001a1a,#003333)">💧</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Water &amp; Irrigation</div>
+      <div class="scheme-title">PMKSY</div>
+      <div class="scheme-full-name">Pradhan Mantri Krishi Sinchaee Yojana</div>
+      <div class="scheme-desc">Aims to expand cultivable area under assured irrigation, improve water use efficiency, and introduce sustainable water conservation practices with "Har Khet Ko Pani, More Crop Per Drop."</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>55% subsidy for SC/ST farmers on micro-irrigation</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>45% subsidy for general category farmers</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Drip + Sprinkler systems fully subsidized</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Watershed development and groundwater recharge</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">💧 Drip &amp; Sprinkler</span>
+        <span class="meta-tag">💰 Up to 55% Subsidy</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://pmksy.gov.in" target="_blank" class="act-btn primary">🌐 Apply Now</a>
+        <a href="https://pmksy.gov.in/MicroIrrigation/Index.aspx" target="_blank" class="act-btn secondary">💧 Micro Irrigation</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="technology">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0a0a1a,#15154d)">🔬</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Soil Health</div>
+      <div class="scheme-title">Soil Health Card</div>
+      <div class="scheme-full-name">Soil Health Card Scheme (SHC)</div>
+      <div class="scheme-desc">Provides a soil health card to every farmer containing information on soil nutrient status and recommendations on appropriate dosage of nutrients to improve soil health and fertility.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Free soil testing at government labs</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>NPK and micronutrient status of your field</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Crop-specific fertilizer recommendations</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Issued every 2 years — online downloadable</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🆓 Free Testing</span>
+        <span class="meta-tag">📊 Personalized Report</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://soilhealth.dac.gov.in" target="_blank" class="act-btn primary">🌐 Official Site</a>
+        <a href="https://soilhealth.dac.gov.in/PublicReportDetails" target="_blank" class="act-btn secondary">📋 View Report</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="market">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#1a0a0a,#3d1515)">🏪</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Digital Market</div>
+      <div class="scheme-title">eNAM</div>
+      <div class="scheme-full-name">National Agriculture Market — Electronic Platform</div>
+      <div class="scheme-desc">Pan-India electronic trading portal networking existing APMC mandis to create unified national market for agricultural commodities, enabling transparent price discovery.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Online bidding from across India — better prices</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>1,260+ mandis connected across 23 states</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Transparent price discovery — no middlemen</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Direct bank payment within 24–48 hours</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🌐 Online Trading</span>
+        <span class="meta-tag">📍 1260+ Mandis</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://enam.gov.in" target="_blank" class="act-btn primary">🌐 eNAM Portal</a>
+        <a href="https://enam.gov.in/NEML/faces/pages/registrations/traderRegistration.xhtml" target="_blank" class="act-btn secondary">📝 Register</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="infrastructure">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0a1a10,#0f2d18)">🏗️</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Infrastructure</div>
+      <div class="scheme-title">AIF — Agri Infra Fund</div>
+      <div class="scheme-full-name">Agriculture Infrastructure Fund</div>
+      <div class="scheme-desc">₹1 lakh crore fund to finance viable projects for post-harvest management, storage, cold chains, and other community farming assets at subsidized interest rates.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Loan up to ₹2 crore with 3% interest subvention</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Cold storage, warehouses, silos, pack houses</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Credit guarantee for loans up to ₹2 crore</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>FPOs, PACS, agri-entrepreneurs eligible</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🏦 ₹1L Crore Fund</span>
+        <span class="meta-tag">💰 3% Subvention</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://agriinfra.dac.gov.in" target="_blank" class="act-btn primary">🌐 AIF Portal</a>
+        <a href="https://agriinfra.dac.gov.in/home/registration" target="_blank" class="act-btn secondary">📝 Apply</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="technology">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#1a1000,#3d2a00)">🌿</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Organic Farming</div>
+      <div class="scheme-title">PKVY</div>
+      <div class="scheme-full-name">Paramparagat Krishi Vikas Yojana</div>
+      <div class="scheme-desc">Promotes organic farming through cluster approach, providing financial assistance for organic inputs, certification, and market linkage to help farmers switch to organic methods.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>₹50,000/ha over 3 years for organic farming</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Free NPOP organic certification</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Market linkage and branding support</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Cluster of 20 ha — join with neighboring farmers</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🌿 Organic</span>
+        <span class="meta-tag">💰 ₹50K/ha</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://pgsindia-ncof.gov.in" target="_blank" class="act-btn primary">🌐 Official Site</a>
+        <a href="https://agricoop.nic.in" target="_blank" class="act-btn secondary">📋 Apply</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="credit">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0f0a1a,#1f1540)">🤝</div>
+    <div class="scheme-body">
+      <div class="scheme-category">FPO Support</div>
+      <div class="scheme-title">FPO Formation Scheme</div>
+      <div class="scheme-full-name">Formation &amp; Promotion of 10,000 FPOs</div>
+      <div class="scheme-desc">Central sector scheme to form and promote 10,000 new Farmer Producer Organizations (FPOs) with financial assistance for 5 years to provide collective benefits to small farmers.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>₹18 lakh financial assistance per FPO over 3 years</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Credit guarantee of up to ₹2 crore per FPO</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Professional management and training support</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Minimum 300 farmers per FPO in plains</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">👨‍🌾 10,000 FPOs</span>
+        <span class="meta-tag">💰 ₹18L Grant</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://sfacindia.com" target="_blank" class="act-btn primary">🌐 SFAC Portal</a>
+        <a href="https://fpoinfo.sfacindia.com" target="_blank" class="act-btn secondary">📋 FPO Info</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="technology">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#001a0f,#002d1a)">📱</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Digital Agriculture</div>
+      <div class="scheme-title">Digital Agriculture Mission</div>
+      <div class="scheme-full-name">Digital Agriculture Mission 2021–2025</div>
+      <div class="scheme-desc">Creates digital public infrastructure for agriculture including AgriStack (farmers database), Kisan e-Mitra chatbot, Unified Farmer Service Interface, and AI-based crop advisory.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Farmer Digital Identity (Farmer ID linked to Aadhaar)</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>AI-based crop health monitoring via satellite</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Automated weather advisory and crop insurance</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Unified platform for all government services</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">📱 Digital India</span>
+        <span class="meta-tag">🤖 AI Powered</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://agricoop.nic.in" target="_blank" class="act-btn primary">🌐 Ministry Site</a>
+        <a href="https://farmer.gov.in" target="_blank" class="act-btn secondary">👨‍🌾 Farmer Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="income">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#1a000a,#3d0015)">👵</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Pension</div>
+      <div class="scheme-title">PM Kisan Mandhan Yojana</div>
+      <div class="scheme-full-name">Pradhan Mantri Kisan Maandhan Yojana</div>
+      <div class="scheme-desc">Voluntary pension scheme for small and marginal farmers aged 18–40 years, providing a minimum monthly pension of ₹3,000 after the age of 60.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>₹3,000/month pension after age 60</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Equal contribution by farmer + Government</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>₹55–₹200/month farmer contribution (age dependent)</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Family pension to spouse on farmer's death</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">👴 Age 18–40</span>
+        <span class="meta-tag">💰 ₹3,000/month</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://maandhan.in" target="_blank" class="act-btn primary">🌐 Apply Now</a>
+        <a href="https://maandhan.in/shramyogi" target="_blank" class="act-btn secondary">📋 Status Check</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="infrastructure">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#001510,#002d20)">🏬</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Storage &amp; Warehousing</div>
+      <div class="scheme-title">WDRA — Negotiable Warehouse</div>
+      <div class="scheme-full-name">Warehousing Development &amp; Regulatory Authority</div>
+      <div class="scheme-desc">Enables farmers to store produce in registered warehouses and obtain loans against Negotiable Warehouse Receipts (NWR) instead of distress selling after harvest.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>70–80% loan against stored produce value</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Interest subvention: 3% for up to 6 months</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Sell when prices are better — no distress sale</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Produce insured during storage period</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🏬 Warehouse Loan</span>
+        <span class="meta-tag">💰 70–80% Advance</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://wdra.gov.in" target="_blank" class="act-btn primary">🌐 WDRA Portal</a>
+        <a href="https://wdra.gov.in/site/writereaddata/WR.pdf" target="_blank" class="act-btn secondary">📄 Guidelines</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="market">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0a0f1a,#101830)">🚢</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Export Support</div>
+      <div class="scheme-title">APEDA Export Schemes</div>
+      <div class="scheme-full-name">Agricultural &amp; Processed Food Products Export Development Authority</div>
+      <div class="scheme-desc">Promotes export of horticultural and processed food products with financial assistance for market development, infrastructure, quality development, and capacity building.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Market development assistance for overseas promotion</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Infrastructure development grant for processing</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Quality control and certification support</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Basmati, spice, and fresh produce export facilitation</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🌏 Export Markets</span>
+        <span class="meta-tag">🏷️ RCMC Required</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://apeda.gov.in" target="_blank" class="act-btn primary">🌐 APEDA Portal</a>
+        <a href="https://apeda.gov.in/apedawebsite/Registration/APEDA_Registration.htm" target="_blank" class="act-btn secondary">📝 Register</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="credit">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#001a15,#002d25)">🏦</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Agricultural Credit</div>
+      <div class="scheme-title">NABARD Refinance</div>
+      <div class="scheme-full-name">NABARD — National Bank for Agriculture &amp; Rural Development</div>
+      <div class="scheme-desc">NABARD provides refinance support to banks for agricultural and rural development activities, enabling farmers to access long-term credit for land development, machinery, and more.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Long-term loans for farm equipment, tractors, land</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Concessional rates for tribal and SC/ST farmers</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Joint Liability Group (JLG) loans for landless farmers</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Rural Infrastructure Development Fund (RIDF)</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🏦 NABARD</span>
+        <span class="meta-tag">🌾 Rural Credit</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://www.nabard.org" target="_blank" class="act-btn primary">🌐 NABARD Portal</a>
+        <a href="https://www.nabard.org/content1.aspx?id=572" target="_blank" class="act-btn secondary">📋 KCC Guide</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="technology">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#100a1a,#1f1540)">🛰️</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Technology</div>
+      <div class="scheme-title">SMAM</div>
+      <div class="scheme-full-name">Sub-Mission on Agricultural Mechanization</div>
+      <div class="scheme-desc">Promotes farm mechanization by providing subsidies on agricultural machinery, farm equipment, and tools to small and marginal farmers and Custom Hiring Centres.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>50% subsidy for small farmers on machinery</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>80% subsidy for SC/ST/women farmers</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Tractors, harvesters, rotavators, drones</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Custom Hiring Centre setup grant up to ₹25 lakh</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🚜 Farm Machinery</span>
+        <span class="meta-tag">💰 50–80% Subsidy</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://farmech.dac.gov.in" target="_blank" class="act-btn primary">🌐 Apply Online</a>
+        <a href="https://farmech.dac.gov.in/FarmerF.aspx" target="_blank" class="act-btn secondary">🚜 CHC Finder</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scheme-card" data-cat="infrastructure">
+    <div class="scheme-banner" style="background:linear-gradient(135deg,#0f1a00,#1f3300)">🐄</div>
+    <div class="scheme-body">
+      <div class="scheme-category">Animal Husbandry</div>
+      <div class="scheme-title">NABARD Dairy / Poultry Loan</div>
+      <div class="scheme-full-name">NABARD Dairy Entrepreneurship Development Scheme (DEDS)</div>
+      <div class="scheme-desc">Provides loans and subsidies for dairy farming, poultry, fisheries, and allied agriculture activities to diversify farmer income through animal husbandry.</div>
+      <div class="scheme-benefits">
+        <h4>Key Benefits</h4>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>25% back-end subsidy (33% for SC/ST) on dairy</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Loan for milking machines, fodder choppers, cold chains</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>Poultry, fisheries, beekeeping loans available</div>
+        <div class="benefit-item"><div class="benefit-dot">✓</div>PM Matsya Sampada for fisheries development</div>
+      </div>
+      <div class="scheme-meta">
+        <span class="meta-tag">🐄 Dairy</span>
+        <span class="meta-tag">🐟 Fisheries</span>
+        <span class="meta-tag">💰 25% Subsidy</span>
+      </div>
+      <div class="scheme-actions">
+        <a href="https://www.nabard.org/content1.aspx?id=579" target="_blank" class="act-btn primary">🌐 NABARD DEDS</a>
+        <a href="https://pmmsy.dof.gov.in" target="_blank" class="act-btn secondary">🐟 PM Matsya</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="helpline-section">
+  <h2>📞 Agriculture Helplines &amp; Key Portals</h2>
+  <div class="helpline-grid">
+    <div class="helpline-card">
+      <div class="hicon" style="background:rgba(34,197,94,0.1)">🌾</div>
+      <div>
+        <div class="hnum">1551</div>
+        <div class="hlabel">Kisan Call Centre (24×7)</div>
+      </div>
+    </div>
+    <div class="helpline-card">
+      <div class="hicon" style="background:rgba(59,130,246,0.1)">💰</div>
+      <div>
+        <div class="hnum">155261</div>
+        <div class="hlabel">PM-KISAN Helpline</div>
+      </div>
+    </div>
+    <div class="helpline-card">
+      <div class="hicon" style="background:rgba(245,158,11,0.1)">🛡️</div>
+      <div>
+        <div class="hnum">14447</div>
+        <div class="hlabel">PMFBY Crop Insurance</div>
+      </div>
+    </div>
+    <div class="helpline-card">
+      <div class="hicon" style="background:rgba(236,72,153,0.1)">🏦</div>
+      <div>
+        <div class="hnum">1800-200-7721</div>
+        <div class="hlabel">NABARD Toll Free</div>
+      </div>
+    </div>
+    <div class="helpline-card">
+      <div class="hicon" style="background:rgba(139,92,246,0.1)">🌡️</div>
+      <div>
+        <div class="hnum">7065-891-266</div>
+        <div class="hlabel">Mausam (Weather) App</div>
+      </div>
+    </div>
+    <div class="helpline-card">
+      <div class="hicon" style="background:rgba(6,182,212,0.1)">📱</div>
+      <div>
+        <div class="hnum">farmer.gov.in</div>
+        <div class="hlabel">National Farmer Portal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-bar">
+  © 2024–25 KrishiMitra AI · Government scheme information sourced from official portals · Always verify details at official websites before applying<br>
+  <a href="index.html" style="color:var(--p3);text-decoration:none;margin-top:8px;display:inline-block">← Back to KrishiMitra AI Chat</a>
+</div>
+
+<script>
+function filterCards(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.scheme-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

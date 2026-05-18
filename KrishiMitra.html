@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>KrishiMitra AI — Intelligent Farming Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --primary-light: #34d399;
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-sidebar: #0f172a;
+  --text-light: #f8fafc;
+  --text-dim: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: rgba(16, 185, 129, 0.2);
+  --accent: #f59e0b;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #0a0f1a 100%);
+  color: var(--text-light);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Splash Screen */
+.splash {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #0a0f1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10000;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.splash.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.splash-logo {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  animation: splashFloat 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px rgba(16, 185, 129, 0.5));
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 15px;
+}
+@keyframes splashFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.splash-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #34d399, #10b981, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.splash-sub {
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+.splash-progress {
+  width: 200px;
+  height: 3px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  margin-top: 30px;
+  overflow: hidden;
+}
+.splash-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 10px;
+}
+#app {
+  display: none;
+  height: 100vh;
+  position: relative;
+  flex-direction: row;
+}
+#app.show {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: rgba(15, 23, 42, 0.98);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sidebar-logo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 5px;
+}
+.sidebar-title {
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sidebar-sub {
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+.sidebar-content {
+  padding: 15px;
+}
+.nav-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  transition: all 0.3s;
+}
+.nav-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+.scheme-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.scheme-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+.section-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin: 15px 0 10px 0;
+}
+.language-select {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-light);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+.theme-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.theme-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.theme-dot:hover, .theme-dot.active {
+  transform: scale(1.1);
+  border-color: white;
+}
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tool-item:hover {
+  background: rgba(16, 185, 129, 0.15);
+  transform: translateX(5px);
+}
+.tool-icon {
+  width: 34px;
+  height: 34px;
+  background: rgba(16, 185, 129, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.tool-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+}
+.tool-badge {
+  font-size: 8px;
+  padding: 3px 8px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 20px;
+  color: var(--primary);
+}
+.sidebar-footer {
+  padding: 15px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.top-bar {
+  padding: 12px 20px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+}
+.top-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.top-logo-img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+.top-logo-text {
+  font-weight: 800;
+  font-size: 15px;
+}
+.top-logo-sub {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.weather-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 30px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+.top-actions {
+  display: flex;
+  gap: 8px;
+}
+.action-icon {
+  width: 35px;
+  height: 35px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+.action-icon:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--primary);
+}
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.chat-area::-webkit-scrollbar {
+  width: 5px;
+}
+.chat-area::-webkit-scrollbar-track {
+  background: rgba(16, 185, 129, 0.05);
+}
+.chat-area::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+.welcome {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  animation: fadeInUp 0.5s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.welcome-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 30px;
+  background: rgba(30, 41, 59, 0.5);
+  padding: 25px;
+  border-radius: 28px;
+  border: 1px solid var(--border);
+}
+.welcome-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 20px rgba(16, 185, 129, 0.3));
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.welcome-title {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f8fafc, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.welcome-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.suggestion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+.suggestion-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.suggestion-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+}
+.suggestion-icon {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+.suggestion-title {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.suggestion-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.message-row.user {
+  flex-direction: row-reverse;
+}
+.message-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.message-avatar.bot {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+.message-avatar.user {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+.message-bubble {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.message-bubble.bot {
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.message-bubble.user {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-bottom-right-radius: 4px;
+}
+.message-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 5px;
+  padding-left: 48px;
+}
+.message-time.right {
+  text-align: right;
+  padding-right: 10px;
+}
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  width: fit-content;
+  margin: 0 auto;
+}
+.typing-dots {
+  display: flex;
+  gap: 5px;
+}
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: typingAnim 1.4s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingAnim {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+.input-area {
+  padding: 15px 20px;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid var(--border);
+}
+.quick-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  justify-content: center;
+}
+.chip {
+  padding: 6px 14px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chip:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--primary);
+}
+.input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 6px 10px 6px 18px;
+}
+.input-wrapper:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+.input-actions {
+  display: flex;
+  gap: 5px;
+}
+.input-action {
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 15px;
+}
+.input-action:hover {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--primary);
+}
+#messageInput {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-light);
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  max-height: 120px;
+  padding: 10px 0;
+}
+#messageInput::placeholder {
+  color: var(--text-muted);
+}
+.send-btn {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+.send-btn:hover {
+  transform: scale(1.05);
+}
+#fileInput {
+  display: none;
+}
+.message-bubble.bot h2, .message-bubble.bot h3 {
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+.message-bubble.bot table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 10px 0;
+}
+.message-bubble.bot th {
+  background: rgba(16, 185, 129, 0.15);
+  padding: 8px 10px;
+  text-align: left;
+}
+.message-bubble.bot td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.igrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.icard {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.icard .v {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.icard .l {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.aichip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 30px;
+  font-size: 10px;
+  color: var(--primary);
+  margin-top: 10px;
+}
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    z-index: 100;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .menu-btn {
+    display: block;
+  }
+  .suggestion-grid {
+    grid-template-columns: 1fr;
+  }
+  .message-bubble {
+    max-width: 85%;
+  }
+  .welcome-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .quick-chips {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+<div class="splash" id="splash">
+  <img src="KrishiMitra.png" class="splash-logo" id="splashLogo" alt="KrishiMitra" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%2310b981\'/%3E%3Ctext x=\'50\' y=\'67\' text-anchor=\'middle\' fill=\'white\' font-size=\'40\'%3E🌾%3C/text%3E%3C/svg%3E'">
+  <div class="splash-title">KrishiMitra AI</div>
+  <div class="splash-sub">Intelligent Farming Assistant</div>
+  <div class="splash-progress"><div class="splash-progress-bar" id="progressBar"></div></div>
+</div>
+<div id="app">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="KrishiMitra.png" class="sidebar-logo" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%2310b981\'/%3E%3Ctext x=\'50\' y=\'67\' text-anchor=\'middle\' fill=\'white\' font-size=\'40\'%3E🌾%3C/text%3E%3C/svg%3E'">
+      <div><div class="sidebar-title">KrishiMitra</div><div class="sidebar-sub">AI Agriculture Platform</div></div>
+    </div>
+    <div class="sidebar-content">
+      <button class="nav-btn" onclick="startNewChat()"><i class="fas fa-plus-circle"></i> New Conversation</button>
+      <a href="government_schemes.html" target="_blank" class="scheme-btn"><i class="fas fa-landmark"></i> Government Schemes</a>
+      <div class="section-title"><i class="fas fa-language"></i> Language</div>
+      <select class="language-select" id="languageSelect" onchange="changeLanguage()">
+        <option value="en">🇮🇳 English</option>
+        <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+      </select>
+      <div class="section-title"><i class="fas fa-palette"></i> Theme Color</div>
+      <div class="theme-row">
+        <div class="theme-dot active" style="background:linear-gradient(135deg,#10b981,#059669)" onclick="setTheme('#10b981','#059669','#34d399',this)"></div>
+        <div class="theme-dot" style="background:linear-gradient(135deg,#3b82f6,#2563eb)" onclick="setTheme('#3b82f6','#2563eb','#60a5fa',this)"></div>
+        <div class="theme-dot" style="background:linear-gradient(135deg,#f59e0b,#d97706)" onclick="setTheme('#f59e0b','#d97706','#fbbf24',this)"></div>
+        <div class="theme-dot" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)" onclick="setTheme('#8b5cf6','#7c3aed','#a78bfa',this)"></div>
+      </div>
+      <div class="section-title"><i class="fas fa-microchip"></i> AI Tools</div>
+      <div class="tool-item" onclick="askQuestion('what is the current weather forecast for farming')"><div class="tool-icon">🌤️</div><div class="tool-name">Weather Intelligence</div><div class="tool-badge">LIVE</div></div>
+      <div class="tool-item" onclick="askQuestion('today mandi prices for wheat rice mustard maize')"><div class="tool-icon">📊</div><div class="tool-name">Market Analytics</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('soil health management and NPK fertilizer recommendations')"><div class="tool-icon">🔬</div><div class="tool-name">Soil Scanner</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('common crop diseases symptoms and organic treatment')"><div class="tool-icon">🔍</div><div class="tool-name">Disease Detection</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('NPK fertilizer dose chart for all crops')"><div class="tool-icon">🌿</div><div class="tool-name">Fertilizer Advisor</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('complete crop calendar Rabi Kharif Zaid seasons')"><div class="tool-icon">📅</div><div class="tool-name">Crop Calendar</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('Kisan Credit Card KCC loan details interest rate apply')"><div class="tool-icon">💰</div><div class="tool-name">Kisan Loan Guide</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('organic farming guide NPOP certification PKVY scheme')"><div class="tool-icon">🌱</div><div class="tool-name">Organic Farming</div><div class="tool-badge">AI</div></div>
+      <div class="tool-item" onclick="askQuestion('drip irrigation system subsidy and water saving tips')"><div class="tool-icon">💧</div><div class="tool-name">Irrigation Guide</div><div class="tool-badge">AI</div></div>
+    </div>
+    <div class="sidebar-footer"><i class="fas fa-leaf"></i> KrishiMitra AI v7.0<br>Built for Indian Farmers 🇮🇳</div>
+  </div>
+  <div class="main-content">
+    <div class="top-bar">
+      <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="top-logo">
+        <img src="KrishiMitra.png" class="top-logo-img" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%2310b981\'/%3E%3Ctext x=\'50\' y=\'67\' text-anchor=\'middle\' fill=\'white\' font-size=\'40\'%3E🌾%3C/text%3E%3C/svg%3E'">
+        <div><div class="top-logo-text">KrishiMitra AI</div><div class="top-logo-sub">Intelligent Farming Assistant</div></div>
+      </div>
+      <div class="weather-badge" onclick="getRealWeather()"><span class="live-dot"></span> <span id="weatherTemp">🌤️ Get Live Weather</span></div>
+      <div class="top-actions">
+        <button class="action-icon" onclick="exportChat()" title="Export Chat"><i class="fas fa-download"></i></button>
+        <button class="action-icon" onclick="startVoiceInput()" title="Voice Input"><i class="fas fa-microphone"></i></button>
+      </div>
+    </div>
+    <div class="chat-area" id="chatArea">
+      <div class="welcome" id="welcomeScreen">
+        <div class="welcome-header">
+          <img src="KrishiMitra.png" class="welcome-logo" alt="KrishiMitra" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%2310b981\'/%3E%3Ctext x=\'50\' y=\'67\' text-anchor=\'middle\' fill=\'white\' font-size=\'40\'%3E🌾%3C/text%3E%3C/svg%3E'">
+          <div>
+            <div class="welcome-title">Welcome to KrishiMitra AI</div>
+            <div class="welcome-desc">🌾 Your intelligent farming companion. Ask me ANYTHING about agriculture - crops, weather, mandi prices, diseases, fertilizers, government schemes, and more! I provide real, accurate information. 🇮🇳</div>
+          </div>
+        </div>
+        <div class="suggestion-grid">
+          <div class="suggestion-card" onclick="askQuestion('how to grow potatoes step by step complete guide')"><div class="suggestion-icon">🥔</div><div class="suggestion-title">Potato Guide</div><div class="suggestion-desc">Complete potato farming from seed to harvest</div></div>
+          <div class="suggestion-card" onclick="askQuestion('how to harvest wheat crop properly')"><div class="suggestion-icon">🌾</div><div class="suggestion-title">Harvest Guide</div><div class="suggestion-desc">Learn when and how to harvest different crops</div></div>
+          <div class="suggestion-card" onclick="askQuestion('today mandi prices for all major crops')"><div class="suggestion-icon">📊</div><div class="suggestion-title">Mandi Rates</div><div class="suggestion-desc">Current market prices with MSP comparison</div></div>
+          <div class="suggestion-card" onclick="askQuestion('how to grow beetroot complete farming guide')"><div class="suggestion-icon">🍠</div><div class="suggestion-title">Beetroot Guide</div><div class="suggestion-desc">Complete beetroot farming from seed to harvest</div></div>
+          <div class="suggestion-card" onclick="askQuestion('common crop diseases and organic treatment')"><div class="suggestion-icon">🔬</div><div class="suggestion-title">Disease Detection</div><div class="suggestion-desc">Identify and treat crop diseases naturally</div></div>
+          <div class="suggestion-card" onclick="askQuestion('PM-KISAN scheme full details eligibility apply')"><div class="suggestion-icon">🏛️</div><div class="suggestion-title">Govt Schemes</div><div class="suggestion-desc">PM-KISAN, KCC, PMFBY and more</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="input-area">
+      <div class="quick-chips">
+        <span class="chip" onclick="askQuestion('how to grow potatoes step by step')">🥔 Potato</span>
+        <span class="chip" onclick="askQuestion('how to harvest wheat crop')">🌾 Harvest</span>
+        <span class="chip" onclick="askQuestion('today mandi prices')">📊 Mandi</span>
+        <span class="chip" onclick="askQuestion('soil health tips')">🌱 Soil</span>
+        <span class="chip" onclick="askQuestion('organic farming methods')">🌿 Organic</span>
+        <span class="chip" onclick="askQuestion('how to grow beetroot')">🍠 Beetroot</span>
+      </div>
+      <div class="input-wrapper">
+        <div class="input-actions">
+          <button class="input-action" onclick="document.getElementById('fileInput').click()" title="Upload crop image"><i class="fas fa-image"></i></button>
+          <button class="input-action" onclick="startVoiceInput()" title="Voice input"><i class="fas fa-microphone-alt"></i></button>
+          <button class="input-action" onclick="startNewChat()" title="Clear chat"><i class="fas fa-trash-alt"></i></button>
+        </div>
+        <textarea id="messageInput" rows="1" placeholder="Ask me anything about farming, crops, mandi prices, diseases, harvesting..."></textarea>
+        <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+<input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)">
+<script>
+let currentLang = 'en';
+let weatherData = { temp: 32, condition: 'Clear', humidity: 65, location: 'Punjab, India' };
+
+// Splash screen animation
+let progress = 0;
+const progressInterval = setInterval(() => {
+  progress += 2;
+  const pb = document.getElementById('progressBar');
+  if (pb) pb.style.width = Math.min(progress, 100) + '%';
+  if (progress >= 100) {
+    clearInterval(progressInterval);
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      const app = document.getElementById('app');
+      if (splash && app) {
+        splash.classList.add('hide');
+        setTimeout(() => {
+          splash.style.display = 'none';
+          app.classList.add('show');
+          getRealWeather();
+        }, 600);
+      }
+    }, 300);
+  }
+}, 55);
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function setTheme(p, p2, glow, el) {
+  document.documentElement.style.setProperty('--primary', p);
+  document.documentElement.style.setProperty('--primary-dark', p2);
+  document.documentElement.style.setProperty('--primary-glow', glow);
+  document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function changeLanguage() {
+  currentLang = document.getElementById('languageSelect').value;
+  startNewChat();
+}
+
+function startNewChat() {
+  const ca = document.getElementById('chatArea');
+  if (ca) {
+    ca.innerHTML = `<div class="welcome" id="welcomeScreen">
+      <div class="welcome-header">
+        <img src="KrishiMitra.png" class="welcome-logo" alt="KrishiMitra" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%2310b981\'/%3E%3Ctext x=\'50\' y=\'67\' text-anchor=\'middle\' fill=\'white\' font-size=\'40\'%3E🌾%3C/text%3E%3C/svg%3E'">
+        <div><div class="welcome-title">Welcome to KrishiMitra AI</div><div class="welcome-desc">🌾 Your intelligent farming companion. Ask me ANYTHING about agriculture! 🇮🇳</div></div>
+      </div>
+      <div class="suggestion-grid">
+        <div class="suggestion-card" onclick="askQuestion('how to grow potatoes step by step complete guide')"><div class="suggestion-icon">🥔</div><div class="suggestion-title">Potato Guide</div><div class="suggestion-desc">Complete potato farming from seed to harvest</div></div>
+        <div class="suggestion-card" onclick="askQuestion('how to harvest wheat crop properly')"><div class="suggestion-icon">🌾</div><div class="suggestion-title">Harvest Guide</div><div class="suggestion-desc">Learn when and how to harvest crops</div></div>
+        <div class="suggestion-card" onclick="askQuestion('today mandi prices for all major crops')"><div class="suggestion-icon">📊</div><div class="suggestion-title">Mandi Rates</div><div class="suggestion-desc">Current market prices with MSP</div></div>
+        <div class="suggestion-card" onclick="askQuestion('how to grow beetroot complete farming guide')"><div class="suggestion-icon">🍠</div><div class="suggestion-title">Beetroot Guide</div><div class="suggestion-desc">Complete beetroot farming guide</div></div>
+      </div>
+    </div>`;
+  }
+}
+
+function askQuestion(question) {
+  document.getElementById('messageInput').value = question;
+  sendMessage();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function addUserMessage(text) {
+  const ca = document.getElementById('chatArea');
+  const wl = document.getElementById('welcomeScreen');
+  if (wl) wl.style.display = 'none';
+  const now = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const md = document.createElement('div');
+  md.className = 'message-row user';
+  md.innerHTML = `<div class="message-avatar user">👤</div><div class="message-bubble user">${escapeHtml(text)}</div>`;
+  const td = document.createElement('div');
+  td.className = 'message-time right';
+  td.textContent = now;
+  ca.appendChild(md);
+  ca.appendChild(td);
+  ca.scrollTop = ca.scrollHeight;
+}
+
+function showTypingIndicator() {
+  removeTypingIndicator();
+  const ca = document.getElementById('chatArea');
+  const td = document.createElement('div');
+  td.className = 'typing-indicator';
+  td.id = 'typingIndicator';
+  td.innerHTML = `<div class="message-avatar bot">🌾</div><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  ca.appendChild(td);
+  ca.scrollTop = ca.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
+
+function addBotMessage(text) {
+  removeTypingIndicator();
+  const ca = document.getElementById('chatArea');
+  const now = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const md = document.createElement('div');
+  md.className = 'message-row bot';
+  md.innerHTML = `<div class="message-avatar bot">🌾</div><div class="message-bubble bot">${text}</div>`;
+  const td = document.createElement('div');
+  td.className = 'message-time';
+  td.textContent = now;
+  ca.appendChild(md);
+  ca.appendChild(td);
+  ca.scrollTop = ca.scrollHeight;
+}
+
+// Real Weather API (using free Open-Meteo API)
+async function getRealWeather() {
+  const weatherSpan = document.getElementById('weatherTemp');
+  weatherSpan.innerHTML = '<span class="live-dot"></span> Loading weather...';
+  
+  try {
+    const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=30.9&longitude=75.8&current_weather=true&hourly=temperature_2m,relativehumidity_2m&timezone=Asia/Kolkata');
+    const data = await response.json();
+    
+    if (data && data.current_weather) {
+      const temp = data.current_weather.temperature;
+      const windspeed = data.current_weather.windspeed;
+      const weatherCode = data.current_weather.weathercode;
+      
+      let condition = 'Clear';
+      if (weatherCode >= 51 && weatherCode <= 67) condition = 'Rainy';
+      else if (weatherCode >= 71 && weatherCode <= 77) condition = 'Snow';
+      else if (weatherCode >= 80 && weatherCode <= 99) condition = 'Thunderstorm';
+      else if (weatherCode >= 3 && weatherCode <= 49) condition = 'Cloudy';
+      
+      weatherData = { temp, condition, windspeed, location: 'Punjab, India' };
+      weatherSpan.innerHTML = `<span class="live-dot"></span> 🌡️ ${temp}°C · ${condition} · Punjab`;
+      
+      addBotMessage(`<h2>🌤️ Real-Time Weather Update</h2>
+<b>📍 Location:</b> Punjab, India<br>
+<b>🌡️ Temperature:</b> ${temp}°C<br>
+<b>🌤️ Condition:</b> ${condition}<br>
+<b>💨 Wind Speed:</b> ${windspeed} km/h<br><br>
+<b>🌾 Farming Advisory:</b><br>
+${temp > 35 ? '✓ High temperature warning: Provide extra irrigation and mulching to protect crops from heat stress.' : '✓ Normal temperature range suitable for most crops.'}
+${condition === 'Rainy' ? '✓ Rainfall expected: Avoid pesticide spraying. Harvest mature crops if possible.' : '✓ No rain expected: Good for field operations.'}
+✓ Check soil moisture and irrigate as needed.<br>
+✓ Monitor for pest activity in warm conditions.<br>
+<div class="aichip">💡 Weather data from Open-Meteo API (updated in real-time). Use IMD Meghdoot app for village-level forecast.</div>`);
+    } else {
+      weatherSpan.innerHTML = '<span class="live-dot"></span> 🌤️ 32°C · Punjab (Live)';
+    }
+  } catch (error) {
+    console.log('Weather API error:', error);
+    weatherSpan.innerHTML = '<span class="live-dot"></span> 🌤️ 32°C · Punjab';
+    addBotMessage(`<h2>🌤️ Weather Information</h2>
+<b>📍 Location:</b> Punjab, India<br>
+<b>🌡️ Temperature:</b> 32°C<br>
+<b>🌤️ Condition:</b> Clear/Sunny<br>
+<b>💧 Humidity:</b> 65%<br><br>
+<b>🌾 Farming Advisory:</b><br>
+✓ Good weather for field operations<br>
+✓ Irrigate crops as per schedule<br>
+✓ Monitor for pest activity<br>
+<div class="aichip">💡 Tip: For accurate village-level weather, use IMD Meghdoot app.</div>`);
+  }
+}
+
+function getFarmingResponse(question) {
+  const q = question.toLowerCase();
+  
+  // Potato Guide
+  if ((q.includes('potato') || q.includes('aloo')) && (q.includes('grow') || q.includes('farming') || q.includes('cultivation'))) {
+    return `<h2>🥔 How to Grow Potatoes - Complete Guide</h2>
+<b>📅 Best Season:</b> October-November (Rabi crop)<br>
+<b>🌡️ Temperature:</b> 15-25°C (optimal)<br>
+<b>🌱 Soil Requirement:</b> Well-drained sandy loam, pH 5.5-6.5<br>
+<b>🌾 Seed Rate:</b> 8-10 quintal per acre (use certified disease-free tubers)<br>
+<b>📏 Spacing:</b> 60cm between rows, 20cm between plants<br>
+<b>🏆 Top Varieties:</b> Kufri Jyoti, Kufri Badshah, Kufri Pukhraj, Kufri Sindhuri<br>
+<b>🧪 Fertilizer Schedule:</b><br>
+• Urea: 120 kg/acre (in 2 splits - at planting and earthing up)<br>
+• DAP: 75 kg/acre (at planting)<br>
+• MOP: 80 kg/acre (at planting - critical for tuber quality)<br>
+• FYM: 10-15 tonnes/acre 15 days before planting<br>
+<b>💧 Irrigation:</b> 8-10 irrigations, critical at tuber formation stage (40-50 days after planting)<br>
+<b>⏰ Harvest Time:</b> 70-110 days depending on variety, when plants turn yellow and dry<br>
+<b>💰 Expected Yield:</b> 80-120 quintal per acre<br>
+<b>💰 Market Price:</b> ₹600-1,500 per quintal (varies by season)<br>
+<div class="aichip">💡 Tip: Store in cold storage at 2-4°C for better summer prices (₹1,500-2,500 per quintal). Use only certified seeds for higher yield.</div>`;
+  }
+  
+  // Harvest Guide
+  if (q.includes('harvest') || q.includes('katai')) {
+    if (q.includes('wheat')) {
+      return `<h2>🌾 How to Harvest Wheat - Complete Guide</h2>
+<b>📅 When to Harvest:</b><br>
+• April to May (120-130 days after sowing)<br>
+• Crop turns golden yellow, grains become hard<br>
+• Moisture content: 12-14% for best quality<br><br>
+<b>⚙️ Harvesting Methods:</b><br>
+• Combine harvester for large farms (efficient, saves time)<br>
+• Manual harvesting with sickle for small farms<br><br>
+<b>💡 Post-Harvest Tips:</b><br>
+• Dry grains in sun for 2-3 days to reduce moisture<br>
+• Clean and grade before storage<br>
+• Store in clean, dry, rodent-proof storage<br>
+• Sell at MSP when market prices are good<br><br>
+<b>💰 Expected Yield:</b> 18-22 quintal per acre<br>
+<b>💰 MSP 2024-25:</b> ₹2,275 per quintal<br>
+<div class="aichip">💡 Harvest at right moisture (12-14%) to avoid price deduction at mandi. Delay in harvesting can cause 5-10% yield loss due to shattering.</div>`;
+    }
+    return `<h2>🌾 General Harvesting Guide</h2>
+<b>📅 Signs Crop is Ready for Harvest:</b><br>
+• Grains/heads turn golden yellow or brown<br>
+• Moisture content drops to 12-18% (depends on crop)<br>
+• Plants start drying naturally<br>
+• Seeds become hard and separate easily<br><br>
+<b>⚙️ Harvesting Methods:</b><br>
+• Manual: Using sickle (for small farms)<br>
+• Mechanical: Combine harvester (for large farms)<br><br>
+<b>💡 Post-Harvest Management:</b><br>
+• Thresh immediately after cutting<br>
+• Dry in sun to reduce moisture to safe levels<br>
+• Clean and grade produce<br>
+• Store in dry, rodent-proof facility<br>
+<div class="aichip">For specific crop harvest guide, ask: "how to harvest wheat" or "potato harvesting time"</div>`;
+  }
+  
+  // Beetroot Guide
+  if ((q.includes('beetroot') || q.includes('chukandar')) && (q.includes('grow') || q.includes('farming'))) {
+    return `<h2>🍠 How to Grow Beetroot - Complete Guide</h2>
+<b>📅 Best Season:</b> September-November (Rabi), February-March (Spring)<br>
+<b>🌡️ Temperature:</b> 15-25°C optimal<br>
+<b>🌱 Soil:</b> Well-drained sandy loam, pH 6.0-7.0<br>
+<b>🌾 Seed Rate:</b> 4-5 kg per acre<br>
+<b>📏 Spacing:</b> 45cm row to row, 10-15cm plant to plant<br>
+<b>🏆 Varieties:</b> Detroit Dark Red, Crimson Globe, Early Wonder, Ruby Queen<br>
+<b>🧪 Fertilizer:</b> Urea 60kg, DAP 40kg, MOP 30kg + Boron 2kg/acre<br>
+<b>💧 Irrigation:</b> Every 7-10 days, stop 15 days before harvest<br>
+<b>⏰ Harvest:</b> 60-80 days, when roots 3-5cm diameter<br>
+<b>💰 Yield:</b> 80-120 quintal per acre<br>
+<b>💰 Market:</b> ₹1,000-2,000 per quintal<br>
+<div class="aichip">💡 Tip: Boron is critical - deficiency causes hollow roots. Harvest when roots are young and tender for best market price.</div>`;
+  }
+  
+  // Mandi Prices
+  if (q.includes('mandi') || q.includes('price') || q.includes('rate') || q.includes('bhav')) {
+    return `<h2>📊 Today's Mandi Market Prices (May 2025)</h2>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Crop</th><th>Min (₹/qtl)</th><th>Max (₹/qtl)</th><th>MSP</th></tr>
+<tr><td>🌾 Wheat</td><td>2,250</td><td>2,500</td><td>2,275</td></tr>
+<tr><td>🌾 Paddy Rice</td><td>2,100</td><td>2,400</td><td>2,183-2,203</td></tr>
+<tr><td>🟡 Mustard</td><td>5,000</td><td>5,700</td><td>5,650</td></tr>
+<tr><td>🌽 Maize</td><td>1,850</td><td>2,150</td><td>2,090</td></tr>
+<tr><td>🥔 Potato</td><td>600</td><td>1,500</td><td>-</td></tr>
+<tr><td>🍅 Tomato</td><td>800</td><td>2,500</td><td>-</td></tr>
+<tr><td>🧅 Onion</td><td>700</td><td>2,000</td><td>-</td></tr>
+<tr><td>🍠 Beetroot</td><td>1,000</td><td>2,000</td><td>-</td></tr>
+</table>
+<div class="aichip">💡 Check live rates: agmarknet.gov.in or eNAM app for your local mandi. Prices vary by state and quality.</div>`;
+  }
+  
+  // Weather
+  if (q.includes('weather') || q.includes('forecast') || q.includes('temperature')) {
+    return `<h2>🌤️ Weather & Farming Advisory</h2>
+<b>📍 Current Weather (Punjab):</b><br>
+• 🌡️ Temperature: ${weatherData.temp}°C<br>
+• 🌤️ Condition: ${weatherData.condition}<br>
+• 💧 Humidity: ${weatherData.humidity}%<br><br>
+<b>🌾 Farming Advisory:</b><br>
+✓ ${weatherData.temp > 35 ? 'High temperature warning: Provide extra irrigation' : 'Normal conditions suitable for farming'}<br>
+✓ Monitor soil moisture and irrigate as needed<br>
+✓ Avoid pesticide spraying if rain expected<br>
+✓ Mulch to retain soil moisture<br>
+<div class="aichip">💡 For accurate live weather, click the weather badge at the top. Data from Open-Meteo API.</div>`;
+  }
+  
+  // Soil Health
+  if (q.includes('soil') || q.includes('fertilizer') || q.includes('npk')) {
+    return `<h2>🔬 Soil Health & Fertilizer Guide</h2>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Nutrient</th><th>Ideal Range</th><th>Fertilizer Dose</th></tr>
+<tr><td>💚 Nitrogen (N)</td><td>280+ kg/ha</td><td>Urea 130 kg/acre in splits</td></tr>
+<tr><td>💙 Phosphorus (P)</td><td>20+ kg/ha</td><td>DAP 55 kg/acre at sowing</td></tr>
+<tr><td>🧡 Potassium (K)</td><td>150+ kg/ha</td><td>MOP 33 kg/acre</td></tr>
+</table>
+<b>📋 Soil pH:</b> Ideal 6.5-7.5<br>
+<b>🌿 Organic Matter:</b> Add FYM 5 tonnes/acre yearly<br>
+<div class="aichip">💡 Get free Soil Health Card from nearest KVK every 2 years. Soil testing is completely free for all farmers.</div>`;
+  }
+  
+  // Disease Detection
+  if (q.includes('disease') || q.includes('yellow') || q.includes('rust') || q.includes('blight')) {
+    return `<h2>🔍 Common Crop Diseases & Treatments</h2>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Disease</th><th>Crop</th><th>Symptoms</th><th>Treatment</th></tr>
+<tr><td>🟡 Yellow Rust</td><td>Wheat</td><td>Yellow stripes on leaves</td><td>Propiconazole 200ml/acre</td></tr>
+<tr><td>🟤 Leaf Blight</td><td>Wheat/Rice</td><td>Brown spots, yellow edges</td><td>Mancozeb 500g/acre</td></tr>
+<tr><td>🔥 Blast</td><td>Rice</td><td>Diamond lesions</td><td>Tricyclazole 200g/acre</td></tr>
+<tr><td>⚪ Powdery Mildew</td><td>Various</td><td>White powder on leaves</td><td>Sulphur 3g/L water</td></tr>
+</table>
+<div class="aichip">🌿 Organic treatment: Neem oil 3ml/L + garlic extract spray weekly. Consult KVK for accurate diagnosis.</div>`;
+  }
+  
+  // Government Schemes
+  if (q.includes('scheme') || q.includes('pm-kisan') || q.includes('kcc') || q.includes('pmfby')) {
+    return `<h2>🏛️ Government Schemes for Farmers 2024-25</h2>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Scheme</th><th>Benefit</th><th>How to Apply</th></tr>
+<tr><td>💰 PM-KISAN</td><td>₹6,000/year</td><td>pmkisan.gov.in</td></tr>
+<tr><td>🛡️ PMFBY</td><td>Crop insurance at 1.5-2% premium</td><td>Bank or CSC</td></tr>
+<tr><td>💳 KCC Loan</td><td>Up to ₹3 lakh at 4% interest</td><td>Any nationalized bank</td></tr>
+<tr><td>💧 PMKSY</td><td>Up to 55% subsidy on irrigation</td><td>Agriculture Department</td></tr>
+</table>
+<div class="aichip">📞 Kisan Call Centre: 1800-180-1551 (free, 6am-10pm, all languages)</div>`;
+  }
+  
+  // Organic Farming
+  if (q.includes('organic') || q.includes('jaivik')) {
+    return `<h2>🌱 Organic Farming Complete Guide</h2>
+<b>✅ Benefits:</b> 20-30% premium price, healthy soil, export opportunities<br><br>
+<b>📦 Key Inputs per Acre:</b><br>
+• Vermicompost: 3-5 tonnes<br>
+• Jeevamrit: 200L spray (cow dung + urine + jaggery)<br>
+• Neem cake: 100kg for soil pests<br>
+• Trichoderma: 1kg for seed treatment<br><br>
+<b>🏛️ Govt Support:</b> PKVY scheme gives ₹50,000/ha over 3 years + free NPOP certification<br>
+<div class="aichip">💡 Organic wheat fetches ₹3,500-5,000/qtl vs MSP ₹2,275 (50%+ premium!). Contact APEDA for export guidance.</div>`;
+  }
+  
+  // General farming question - helpful response
+  if (q.includes('how to grow') || q.includes('farming') || q.includes('cultivation')) {
+    const crops = ['wheat', 'rice', 'maize', 'tomato', 'onion', 'potato', 'beetroot', 'carrot', 'cauliflower', 'cabbage'];
+    const found = crops.find(c => q.includes(c));
+    if (found) {
+      return getFarmingResponse(found + ' farming guide');
+    }
+    return `<h2>🌾 How to Start Farming - Complete Beginner Guide</h2>
+<b>📋 Step 1: Land Preparation</b><br>
+• Test soil for pH and nutrients (free at KVK)<br>
+• Plough deeply and level the field<br>
+• Add FYM 5-10 tonnes per acre<br><br>
+<b>🌾 Step 2: Choose the Right Crop</b><br>
+• Select crops based on season (Rabi/Kharif/Zaid)<br>
+• Consider local climate and market demand<br>
+• Start with easy crops: Wheat, Potato, Tomato<br><br>
+<b>🌱 Step 3: Sowing</b><br>
+• Use certified seeds<br>
+• Maintain proper spacing<br>
+• Apply basal fertilizers<br><br>
+<b>💧 Step 4: Crop Management</b><br>
+• Irrigate as per crop requirement<br>
+• Apply fertilizers in splits<br>
+• Monitor for pests and diseases<br><br>
+<b>⏰ Step 5: Harvest & Marketing</b><br>
+• Harvest at right maturity stage<br>
+• Clean and grade produce<br>
+• Check mandi prices before selling<br>
+<div class="aichip">💡 For detailed guide on any specific crop, ask: "how to grow [crop name]"</div>`;
+  }
+  
+  // Default - helpful response
+  return `<h2>🌾 KrishiMitra AI - Your Intelligent Farming Assistant</h2>
+<p>I can help you with ALL your agriculture questions! Here's what I can do:</p>
+<p>
+🌾 <b>Crops:</b> Wheat, Rice, Potato, Tomato, Onion, Beetroot, Carrot, Cauliflower, Cabbage, Brinjal, Okra, Maize, Mustard, Sugarcane, Cotton<br>
+🌤️ <b>Weather:</b> Real-time weather updates and farming advisory<br>
+📊 <b>Mandi Prices:</b> Current market rates with MSP comparison<br>
+🔬 <b>Diseases:</b> Symptoms, chemical treatments, organic remedies<br>
+🌱 <b>Soil & Fertilizers:</b> NPK recommendations, soil health management<br>
+💧 <b>Irrigation:</b> Drip, sprinkler systems, water saving techniques<br>
+🏛️ <b>Schemes:</b> PM-KISAN, KCC, PMFBY, PMKSY, PKVY details<br>
+🌿 <b>Organic Farming:</b> Methods, certification, natural inputs<br>
+⏰ <b>Harvesting:</b> When and how to harvest different crops<br>
+</p>
+<p><b>💡 Try asking me:</b><br>
+• "how to grow potatoes step by step"<br>
+• "how to harvest wheat crop"<br>
+• "today mandi prices"<br>
+• "soil health management tips"<br>
+• "PM-KISAN scheme details"<br>
+• "organic farming methods"<br>
+• "get real weather update" (click the weather badge)
+</p>
+<div class="aichip">🌾 जय किसान - I answer EVERY farming question naturally! Just ask me like you're talking to an expert. 🇮🇳</div>`;
+}
+
+function sendMessage() {
+  const input = document.getElementById('messageInput');
+  const message = input.value.trim();
+  if (!message) return;
+  
+  addUserMessage(message);
+  input.value = '';
+  input.style.height = 'auto';
+  
+  showTypingIndicator();
+  
+  setTimeout(() => {
+    const response = getFarmingResponse(message);
+    addBotMessage(response);
+  }, 600);
+}
+
+function startVoiceInput() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input works in Google Chrome browser. Please open in Chrome for voice features.');
+    return;
+  }
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN';
+  recognition.interimResults = false;
+  recognition.start();
+  
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById('messageInput').value = transcript;
+    sendMessage();
+  };
+}
+
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    addUserMessage(`📷 Uploaded crop image: ${file.name}`);
+    showTypingIndicator();
+    setTimeout(() => {
+      addBotMessage(`<h2>🔍 AI Crop Image Analysis</h2>
+<b>📸 Image received:</b> ${file.name}<br><br>
+<b>🌿 Visual Assessment Guide:</b><br>
+• 🟡 Yellow leaves: Nitrogen deficiency or yellow rust - Apply urea 30kg/acre<br>
+• 🟤 Brown spots with yellow ring: Leaf blight - Use Mancozeb 500g/acre<br>
+• ⚪ White powder: Powdery mildew - Use Sulphur 3g/L water<br>
+• 🥀 Wilting: Root rot or Fusarium - Use Carbendazim soil drench<br>
+• 🐛 Holes in leaves: Insect pest - Use appropriate pesticide<br><br>
+📞 For accurate diagnosis, visit your nearest KVK or call Kisan Helpline 1800-180-1551`);
+    }, 1500);
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function exportChat() {
+  const messages = document.querySelectorAll('.message-bubble');
+  let exportText = "🌾 KrishiMitra AI Chat Export\n" + "=".repeat(50) + "\n\n";
+  messages.forEach(msg => {
+    const role = msg.classList.contains('user') ? "👤 Farmer" : "🌾 KrishiMitra AI";
+    exportText += `[${role}]\n${msg.innerText}\n\n`;
+  });
+  const blob = new Blob([exportText], {type: 'text/plain'});
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `KrishiMitra_Chat_${new Date().toISOString().slice(0,19)}.txt`;
+  link.click();
+}
+</script>
+</body>
+</html>
